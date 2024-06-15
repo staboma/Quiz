@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Quiz Uygulaması</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .option-button {
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .start-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>JavaScript Quiz Uygulaması</h1>
+        <div id="question-container">
+            <p class="question"></p>
+            <div class="options"></div>
+        </div>
+        <button id="start-button" class="start-button">Başla</button>
+    </div>
+
+    <script>
+        const questions = [
+            { question: "Türkiye'nin başkenti hangi şehirdir?", options: ["Ankara", "İstanbul", "İzmir", "Bursa"], answer: "Ankara" },
+            { question: "Hangisi bir meyve değildir?", options: ["Elma", "Armut", "Patates", "Muz"], answer: "Patates" },
+            { question: "Dünyanın en uzun nehri hangisidir?", options: ["Nil", "Amazon", "Yangtze", "Mississippi"], answer: "Nil" },
+            { question: "Hangisi bir renk değildir?", options: ["Kırmızı", "Yeşil", "Mavi", "Masa"], answer: "Masa" },
+            { question: "Hangi gezegen Güneş Sistemi'nden dışarıdadır?", options: ["Mars", "Jüpiter", "Plüton", "Venüs"], answer: "Plüton" },
+            { question: "Hangi yıl İstanbul'un fethi gerçekleşmiştir?", options: ["1453", "1299", "1517", "1683"], answer: "1453" },
+            { question: "Hangisi bir hayvan değildir?", options: ["Köpek", "Kedi", "Kuş", "Araba"], answer: "Araba" },
+            { question: "Hangi ülkenin başkenti Buenos Aires'tir?", options: ["Brezilya", "Arjantin", "Şili", "Kolombiya"], answer: "Arjantin" },
+            { question: "Hangi yıl Amerika Birleşik Devletleri bağımsızlık ilan etmiştir?", options: ["1776", "1789", "1804", "1812"], answer: "1776" },
+            { question: "Hangi şehir Eiffel Kulesi'ne ev sahipliği yapmaktadır?", options: ["Paris", "Londra", "Berlin", "Roma"], answer: "Paris" },
+            { question: "Hangisi bir programlama dilidir?", options: ["HTML", "CSS", "Python", "Excel"], answer: "Python" },
+            { question: "Hangisi bir çiçek ismi değildir?", options: ["Güneş", "Lale", "Papatya", "Menekşe"], answer: "Güneş" },
+            { question: "Hangi gezegenin uydusu Europa'dır?", options: ["Mars", "Jüpiter", "Venüs", "Satürn"], answer: "Jüpiter" },
+            { question: "Hangi yıl Titanic gemisi battı?", options: ["1912", "1900", "1920", "1898"], answer: "1912" },
+            { question: "Hangisi bir deniz hayvanıdır?", options: ["Kuş", "Kaplumbağa", "Fil", "Balina"], answer: "Balina" }
+        ];
+
+        let currentQuestionIndex = 0;
+        let wrongAnswersCount = 0;
+
+        const questionContainer = document.getElementById("question-container");
+        const startButton = document.getElementById("start-button");
+        const optionsContainer = document.querySelector(".options");
+
+        function startQuiz() {
+            startButton.style.display = "none";
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                const { question, options } = questions[currentQuestionIndex];
+                questionContainer.querySelector(".question").textContent = question;
+
+                optionsContainer.innerHTML = "";
+                options.forEach(option => {
+                    const button = document.createElement("button");
+                    button.textContent = option;
+                    button.classList.add("option-button");
+                    button.addEventListener("click", () => checkAnswer(option));
+                    optionsContainer.appendChild(button);
+                });
+            } else {
+                endQuiz();
+            }
+        }
+
+        function checkAnswer(selectedOption) {
+            const correctAnswer = questions[currentQuestionIndex].answer;
+            if (selectedOption === correctAnswer) {
+                currentQuestionIndex++;
+                showQuestion();
+            } else {
+                wrongAnswersCount++;
+                if (wrongAnswersCount >= 3) {
+                    endQuiz();
+                } else {
+                    alert("Yanlış cevap. Tekrar deneyin.");
+                }
+            }
+        }
+
+        function endQuiz() {
+            alert(`Quiz bitti!\nToplam Yanlış Cevap Sayısı: ${wrongAnswersCount}`);
+            resetQuiz();
+        }
+
+        function resetQuiz() {
+            currentQuestionIndex = 0;
+            wrongAnswersCount = 0;
+            startButton.style.display = "block";
+            showQuestion();
+        }
+
+        startButton.addEventListener("click", startQuiz);
+    </script>
+</body>
+</html>
